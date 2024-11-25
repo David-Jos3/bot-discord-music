@@ -12,6 +12,7 @@ import { registerCommands } from './scripts/registerCommands'
 import { execute } from './commands/play'
 import { skip } from './commands/skip'
 import { pause } from './commands/pause'
+import { responseaOllama } from './service/ollamaService'
 
 registerCommands()
 
@@ -57,6 +58,13 @@ client.on('interactionCreate', async (interaction) => {
   if (interaction.commandName === 'pause') {
     await pause(interaction as CommandInteraction &
       { member: GuildMember }, player)
+  }
+})
+
+client.on('messageCreate', async (message) => {
+  if (message.content.startsWith('!ask')) {
+    const question = message.content.slice(5).trim()
+    await responseaOllama(question, message)
   }
 })
 
